@@ -19,6 +19,22 @@ class UserService {
         }
     }
 
+    async signIn(email, plainPassword) {
+        try {
+            const user = await this.userRepository.getByEmail(email);
+            const passwordMatch = this.checkPassword(plainPassword, user.password);
+            if(!passwordMatch) {
+                console.log("Password doesn't match");
+                throw {error: "Password doesn't match"};
+            }
+            const newJwt = this.createToken({email: user.email, id: user.id});
+            return newJwt;
+        } catch (error) {
+            console.log('Something went wrong in the sign in process');
+            throw {error};
+        }
+    }
+
     async destroy(userId) {
         try {  
             await this.userRepository.destroy({
