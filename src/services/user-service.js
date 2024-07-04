@@ -35,6 +35,23 @@ class UserService {
         }
     }
 
+    async isAuthenticated(token) {
+        try {
+            const response = this.verifyToken(token);
+            if(!response) {
+                throw {error: 'Invalid token'};
+            }
+            const user = await this.userRepository.getById(response.id);
+            if(!user) {
+                throw {error: 'No user with corresponding token found'};
+            }
+            return user.id;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
     async destroy(userId) {
         try {  
             await this.userRepository.destroy({
