@@ -9,6 +9,18 @@ const validateUserAuth = (req, res, next) => {
     next();
 }
 
+const validateIsAdminRequest = (req, res, next) => {
+    if(!req.body.userId) {
+        return res.status(400).json({
+            data: {},
+            success: false,
+            message: 'userId not found'
+        });
+    }
+    next();
+}
+
 module.exports = {
-    validateUserAuth
+    validateUserAuth,
+    validateIsAdminRequest
 };

@@ -83,9 +83,29 @@ const destroy = async (req, res) => {
     }
 }
 
+const isAdmin = async (req, res) => {
+    try {
+        const response = await userService.isAdmin(req.body.userId);
+        return res.status(200).json({
+            data: response,
+            success: true,
+            message: 'checked wheather user is admin or not'
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            data: {},
+            success: false,
+            message: 'No admin access',
+            error: err
+        });
+    }
+}
+
 module.exports = {
     create,
     destroy,
     signIn,
-    isAuthenticated
+    isAuthenticated,
+    isAdmin
 }
